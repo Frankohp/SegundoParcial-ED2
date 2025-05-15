@@ -58,3 +58,21 @@ class ArbolBinario:
         def _inorden(nodo):
             return _inorden(nodo.izquierda) + [nodo.valor] + _inorden(nodo.derecha) if nodo else []
         return _inorden(self.raiz)
+    
+    def tio(self, t, s):
+        nodo_s, padre_s = self.buscar_con_padre(s)
+        if not nodo_s or not padre_s:
+            return False 
+
+        nodo_t, _ = self.buscar_con_padre(t)
+        if not nodo_t:
+            return False 
+
+        abuelo, _ = self.buscar_con_padre(padre_s.valor)
+        if not abuelo:
+            return False 
+
+        return (abuelo.izquierda == padre_s and abuelo.derecha == nodo_t) or \
+               (abuelo.derecha == padre_s and abuelo.izquierda == nodo_t)
+    
+
