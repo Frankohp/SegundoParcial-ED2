@@ -41,6 +41,18 @@ class Cola:
 
     def obtener_longitud(self):
         return self.longitud
+    
+    def maximo(self):
+        if self.esta_vacia():
+            print("la cola esta vacia")
+            return None
+        max_valor = self.frente.valor
+        actual = self.frente.siguiente
+        while actual:
+            if actual.valor > max_valor:
+                max_valor = actual.valor
+            actual = actual.siguiente
+        return max_valor
 
     def mostrar_cola(self):
         print("\nEstado actual de la cola:")
