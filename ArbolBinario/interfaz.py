@@ -18,7 +18,8 @@ class AppArbol:
         tk.Button(botones, text="Insertar", command=self.insertar).pack(side=tk.LEFT, padx=5)
         tk.Button(botones, text="Buscar", command=self.buscar).pack(side=tk.LEFT, padx=5)
         tk.Button(botones, text="Eliminar", command=self.eliminar).pack(side=tk.LEFT, padx=5)
-        tk.Button(botones, text="Mostrar Inorden", command=self.mostrar_inorden).pack(side=tk.LEFT, padx=5)
+        tk.Button(botones, text="verificar tios", command=self.tio).pack(side=tk.LEFT, padx=5)
+        tk.Button(botones, text="Mostrar Inorden", command=self.mostrar_inorden).pack(side=tk.LEFT, padx=5) 
 
         self.canvas = tk.Canvas(root, width=600, height=400, bg="white")
         self.canvas.pack(pady=10)
@@ -41,7 +42,23 @@ class AppArbol:
         if valor is not None:
             self.arbol.eliminar(valor)
             self.redibujar()
+            
+    def tio(self, t, s):
+        nodo_s, padre_s = self.buscar_con_padre(s)
+        if not nodo_s or not padre_s:
+            return False 
 
+        nodo_t, _ = self.buscar_con_padre(t)
+        if not nodo_t:
+            return False
+
+        abuelo, _ = self.buscar_con_padre(padre_s.valor)
+        if not abuelo:
+            return False 
+
+        return (abuelo.izquierda == padre_s and abuelo.derecha == nodo_t) or \
+               (abuelo.derecha == padre_s and abuelo.izquierda == nodo_t)
+   
     def mostrar_inorden(self):
         valores = self.arbol.inorden()
         messagebox.showinfo("Recorrido Inorden", " -> ".join(map(str, valores)))
@@ -61,7 +78,7 @@ class AppArbol:
     def dibujar_nodo(self, nodo, x, y, espaciado):
         if nodo is None:
             return
-
+       
         radio = 20
         self.canvas.create_oval(x - radio, y - radio, x + radio, y + radio, fill="lightblue")
         self.canvas.create_text(x, y, text=str(nodo.valor), font=("Arial", 10, "bold"))
